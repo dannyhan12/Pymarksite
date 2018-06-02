@@ -1,24 +1,23 @@
 from app import app
 from markdown import markdown
+from app import BlogPosts
 
 @app.route('/')
 @app.route('/index')
-def index():
-    return "Hello, World!"
-
 @app.route('/blog')
 def blog():
-    md = "# Blog posts\n"
+    md =  "# Welcome\n"
+    md += " {I am a programmer: this is how I spend my days}\n\n"
+    md += "# Blog posts\n"
+    posts = BlogPosts.getPostHeaders(page=0)
 
-    # Todo get posts and slugs from blog directory
-    md += "[Setting up a secure web application]"
-    md += "(/blog/setting-up-a-secure-web-application)"
+    for p in posts:
+        md += f'[{p["Title"]}](blog/{p["Slug"]})'
     return markdown(md)
 
 @app.route('/blog/<slug>')
 def post(slug):
-    try:
-        with open(f'blog/{slug}.md') as input:
-            return markdown(input.read)
-    except IOError:
-        return f'Cannot find post: "{slug}"'
+
+    post = BlogPosts.getPostContent(slug)
+    
+    return post
