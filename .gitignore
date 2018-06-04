@@ -102,4 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# vim tmp files
 *.swp
+
+# Extra stuff for this project
+content/

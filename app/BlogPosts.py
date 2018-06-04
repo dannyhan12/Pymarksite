@@ -14,7 +14,7 @@ def getPostHeaders(page=0):
 
         firstMetaFound = False
         metaData = {}
-        with open(f'content/{f}', 'r') as inputData:
+        with open('content/' + f, 'r') as inputData:
             for line in inputData:
                 if not firstMetaFound and line.startswith('-'):
                     firstMetaFound = True
@@ -37,7 +37,7 @@ def getPostContent(slug):
         firstMetaFound = False
         endMetaFound = False
         slugMatch = False
-        with open(f'content/{f}', 'r') as inputData:
+        with open('content/' + f, 'r') as inputData:
             for line in inputData:
                 if not firstMetaFound and line.startswith('-'):
                     firstMetaFound = True

@@ -12,7 +12,7 @@ def blog():
     posts = BlogPosts.getPostHeaders(page=0)
 
     for p in posts:
-        md += f'[{p["Title"]}](blog/{p["Slug"]})'
+        md += '[' + p['Title'] + '](blog/' + p['Slug'] + ')'
     return markdown(md)
 
 @app.route('/blog/<slug>')
