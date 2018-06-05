@@ -1,25 +1,26 @@
 from app import app
+
 from markdown import markdown
 from app import BlogPosts
+from flask import render_template
 
 
 @app.route('/')
 @app.route('/index')
 @app.route('/blog')
 def blog():
-    md = "# Welcome\n"
-    md += " {I am a programmer: this is how I spend my days}\n\n"
-    md += "# Blog posts\n"
     posts = BlogPosts.getPostHeaders(page=0)
-
-    for p in posts:
-        md += '[' + p['Title'] + '](blog/' + p['Slug'] + ')'
-    return markdown(md)
+    return render_template('blog.html', posts=posts)
 
 
 @app.route('/blog/<slug>')
 def post(slug):
-
     post = BlogPosts.getPostContent(slug)
+    return render_template('post.html', post=post)
 
-    return post
+
+@app.route('/projects')
+@app.route('/about')
+def wip():
+    return render_template('post.html', post="Work in progress ...")
+

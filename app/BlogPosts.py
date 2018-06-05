@@ -50,6 +50,7 @@ def getPostContent(slug):
                 if line.startswith('-'):
                     if slugMatch:
                         endMetaFound = True
+                        continue
                     else:
                         # No matching files, go to next file
                         break
