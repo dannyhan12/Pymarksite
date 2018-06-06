@@ -1,19 +1,28 @@
 <html>
     <head>
-        <!--
-      {% if title %}
-      <title>{{ title }} - Microblog</title>
-      {% else %}
-      <title>Welcome to Microblog</title>
-      {% endif %}
-        -->
+      <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+            type="text/css" />
+      <link rel="stylesheet"
+            href="{{ url_for('static',filename='style.css') }}"
+            type="text/css" />
       <title>Programmer Days</title>
     </head>
     <body>
-        <div><a href="/blog">Blog</a></div>
-        <div><a href="/projects">Projects</a></div>
-        <div><a href="/about">About</a></div>
+      <header>
+        <div>
+          <ul>
+            <li>
+              <a href="/blog">Blog</a>
+              <a href="/projects">Projects</a>
+              <a href="/about">About</a>
+            </li>
+          </ul>
+        </div>
         <hr>
-        {% block content %}{% endblock %}
+      </header>
+
+      {% block content %}{% endblock %}
+
     </body>
 </html>
