@@ -108,3 +108,6 @@ venv.bak/
 
 # Extra stuff for this project
 content/
+
+# Visual studio code
+.vscode
