@@ -1,5 +1,6 @@
 import os
 from markdown import markdown
+from markdown import Markdown
 
 
 class PostHeader():
@@ -62,4 +63,13 @@ def getPostContent(slug):
                             items[1].strip() == slug:
                         slugMatch = True
 
-    return markdown(txt)
+    MD = Markdown(
+        extensions=[
+            "markdown.extensions.codehilite",
+            "markdown.extensions.fenced_code",
+            "markdown.extensions.tables",
+            "markdown.extensions.toc",
+        ]
+    )
+
+    return MD.convert(txt)
