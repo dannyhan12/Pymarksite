@@ -1,12 +1,14 @@
 import os
-from markdown import markdown
 from markdown import Markdown
 
 
-class PostHeader():
-    def __init__(self, title, slug):
-        self.title = title
-        self.slug = slug
+def _isValidHeader(header):
+    '''Return true if the header contains the minimum set of valid fields.'''
+    keys = ['Title', 'Slug', 'Date']
+    for k in keys:
+        if k not in header or not header[k]:
+            return False
+    return True
 
 
 def getPostHeaders(page=0):
@@ -19,17 +21,22 @@ def getPostHeaders(page=0):
         firstMetaFound = False
         metaData = {}
         with open('content/' + f, 'r') as inputData:
-            for line in inputData:
+            data = inputData.read()
+            for rawLine in data.split('\n'):
+                line = rawLine.strip()
                 if not firstMetaFound and line.startswith('-'):
                     firstMetaFound = True
                     continue
                 if line.startswith('-'):
                     # End of metadata
                     break
-                items = line[:-1].split(':')
+                items = line.split(':')
                 if len(items) > 1:
                     metaData[items[0].strip()] = items[1].strip()
-        headers.append(metaData)
+        if _isValidHeader(metaData):
+            headers.append(metaData)
+
+    headers.sort(key=lambda x: x['Date'], reverse=True)
     return headers
 
 
