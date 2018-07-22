@@ -28,21 +28,11 @@ def post(slug):
         title=post.title)
 
 
-@app.route('/projects')
-def projects():
-    app.logger.info('Loading projects page')
-    post = Pages.getPageContent('pages/projects.md')
+@app.route('/pages/<slug>')
+def pages(slug):
+    app.logger.info('Loading {} page'.format(slug))
+    post = Pages.getPageContent('pages/{}.md'.format(slug))
     return render_template(
         'post.html',
         post=post,
-        active_page='projects')
-
-
-@app.route('/about')
-def about():
-    app.logger.info('Loading about page')
-    post = Pages.getPageContent('pages/about.md')
-    return render_template(
-        'post.html',
-        post=post,
-        active_page='about')
+        active_page=slug)

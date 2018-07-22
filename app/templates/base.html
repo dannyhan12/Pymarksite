@@ -21,8 +21,9 @@
         {% set active_page = active_page|default('index') -%}
         {% set navigation_bar = [
             ('/blog', 'blog', 'Blog'),
-            ('/projects', 'projects', 'Projects'),
-            ('/about', 'about', 'About'),
+            ('/pages/projects', 'projects', 'Projects'),
+            ('/pages/reading', 'reading', 'Reading'),
+            ('/pages/about', 'about', 'About'),
         ] -%}
         
         {% for href, id, text in navigation_bar %}
