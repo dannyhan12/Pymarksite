@@ -9,8 +9,8 @@ COPY requirements.txt /web
 # Install packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Copy the rest of the files
-COPY . /web
+# ADD the rest of the files
+ADD . /web
 
 # Set up environment
 RUN mkdir -m 777 /var/log/Pymarksite
