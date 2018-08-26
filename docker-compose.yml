@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build: ./web
+    expose:
+      - 8000
+    volumes:
+     - ./web:/web
+
+  nginx:
+    depends_on:
+     - web
+    restart: always
+    build: ./nginx
+    ports:
+     - "8080:8080"
+     - "443:443"
