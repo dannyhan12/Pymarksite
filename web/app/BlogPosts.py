@@ -1,6 +1,6 @@
 import os
 from markdown import Markdown
-
+BLOG_POSTS_DIR = '/content/posts'
 
 def _isValidHeader(header):
     '''Return true if the header contains the minimum set of valid fields.'''
@@ -14,13 +14,13 @@ def _isValidHeader(header):
 def getPostHeaders(page=0):
     ''' Get information about each post in the content directory.'''
     headers = []
-    for f in os.listdir('content'):
+    for f in os.listdir(BLOG_POSTS_DIR):
         if not f.endswith('.md'):
             continue
 
         firstMetaFound = False
         metaData = {}
-        with open('content/' + f, 'r') as inputData:
+        with open(os.path.join(BLOG_POSTS_DIR, f), 'r') as inputData:
             data = inputData.read()
             for rawLine in data.split('\n'):
                 line = rawLine.strip()

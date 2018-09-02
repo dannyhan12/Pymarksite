@@ -1,5 +1,5 @@
+import os
 from app import app
-
 from markdown import markdown
 from app import BlogPosts
 from app import Pages
@@ -30,8 +30,9 @@ def post(slug):
 
 @app.route('/pages/<slug>')
 def pages(slug):
+    PAGES_DIR = '/content/pages'
     app.logger.info('Loading {} page'.format(slug))
-    post = Pages.getPageContent('pages/{}.md'.format(slug))
+    post = Pages.getPageContent(os.path.join(PAGES_DIR, '{}.md'.format(slug)))
     return render_template(
         'post.html',
         post=post,

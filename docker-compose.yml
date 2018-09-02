@@ -6,8 +6,11 @@ services:
     build: ./web
     expose:
       - 8000
+    ports:
+      - "8000:8000"
     volumes:
      - ./web:/web
+     - ./content:/content
 
   nginx:
     depends_on:
