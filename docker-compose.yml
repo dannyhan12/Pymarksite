@@ -23,3 +23,5 @@ services:
     volumes:
       - /etc/letsencrypt/live/programmerdays.com/fullchain.pem:/etc/letsencrypt/live/programmerdays.com/fullchain.pem
       - /etc/letsencrypt/live/programmerdays.com/privkey.pem:/etc/letsencrypt/live/programmerdays.com/privkey.pem
+      - /usr/share/nginx/html/.well-known/acme-challenge:/usr/share/nginx/html/.well-known/acme-challenge
+
