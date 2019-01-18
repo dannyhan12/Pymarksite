@@ -8,21 +8,21 @@ from flask import render_template
 
 @app.route('/')
 @app.route('/index')
-@app.route('/blog')
-def blog():
-    app.logger.info('Loading blog')
+@app.route('/writing')
+def writing():
+    app.logger.info('Loading writing')
     posts = BlogPosts.getPostHeaders(page=0)
-    return render_template('blog.html', posts=posts, active_page='blog')
+    return render_template('writing.html', posts=posts, active_page='writing')
 
 
-@app.route('/blog/<slug>')
+@app.route('/writing/<slug>')
 def post(slug):
     app.logger.info('Loading post {}'.format(slug))
     post = BlogPosts.getPostContent(slug)
     return render_template(
         'post.html',
         post=post,
-        active_page='blog',
+        active_page='writing',
         url='https://programmerdays.disqus.com/',
         urlslug=slug,
         title=post.title)
