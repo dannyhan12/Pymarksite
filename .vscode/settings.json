@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "web/venv/bin/python3.6",
+    "python.unitTest.pyTestPath": "web/venv/bin/pytest"
+}

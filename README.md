@@ -14,27 +14,23 @@ deactivate
 ```
 
 # How to test
-After you install the requirements, run these commands.
+After you install the requirements, run this command.
 
 ```
-source web/venv/bin/activate
-python3.6 -m pytest --cov .
-deactivate
+web/venv/bin/python3.6 -m pytest --cov .
 ```
 
 This should show test results and data on test coverage.
 
 # How to run
-After you install the requirements, run these commands.
+After you install the requirements, run this command.
 
 ```
-source web/venv/bin/activate
-export FLASK_DEBUG=1
-flask run
-deactivate
+export FLASK_APP=web/main
+web/venv/bin/python3.6 -m flask run
 ```
 
-After you run the last command, you should be able to open a web browser and view the app at [http://127.0.0.0:5000](http://127.0.0.0:5000]).
+After you run this command, you should be able to open a web browser and view the app at [http://127.0.0.0:5000](http://127.0.0.0:5000]).
 
 # Configuration files
 There are a few configuration files to help set up my site.
