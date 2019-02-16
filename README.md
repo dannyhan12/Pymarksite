@@ -1,14 +1,40 @@
 # Pymarksite
 Markdown based cms written in Python
 
-# How to run (on a test machine)
+# How to install requirements
+Run these commands to install required libraries. This will install libraries into a virtual environment.
+
 ```
-virtualenv venv
+cd web
+python3.6 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+python3.6 -m pip install --upgrade pip
+python3.6 -m pip install -r requirements.txt
+deactivate
+```
+
+# How to test
+After you install the requirements, run these commands.
+
+```
+source web/venv/bin/activate
+python3.6 -m pytest --cov .
+deactivate
+```
+
+This should show test results and data on test coverage.
+
+# How to run
+After you install the requirements, run these commands.
+
+```
+source web/venv/bin/activate
 export FLASK_DEBUG=1
 flask run
+deactivate
 ```
+
+After you run the last command, you should be able to open a web browser and view the app at [http://127.0.0.0:5000](http://127.0.0.0:5000]).
 
 # Configuration files
 There are a few configuration files to help set up my site.
