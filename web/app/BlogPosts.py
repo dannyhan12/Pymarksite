@@ -51,7 +51,8 @@ def getPostContent(slug):
         endMetaFound = False
         slugMatch = False
         with open(os.path.join(BLOG_POSTS_DIR, f), 'r') as inputData:
-            for line in inputData:
+            data = inputData.read()
+            for line in data.split('\n'):
                 if not firstMetaFound and line.startswith('-'):
                     firstMetaFound = True
                     continue
@@ -65,7 +66,7 @@ def getPostContent(slug):
                 if endMetaFound:
                     txt += line
                 else:
-                    items = line[:-1].split(':')
+                    items = line.split(':')
                     if len(items) > 1 and items[0].strip() == "Slug" and \
                             items[1].strip() == slug:
                         slugMatch = True
