@@ -3,6 +3,8 @@ from unittest.mock import mock_open, patch
 
 SAMPLE_POST_DATA = '---\n' + \
     'Title: A sample title\n' + \
+    'Description: A sample description\n' + \
+    'Tags: sample, tag\n' + \
     'Slug: a-sample-slug\n' + \
     'Date: 1999/01/31\n' + \
     '---\n' + \
@@ -37,3 +39,7 @@ def test_get_article_by_slug_works(mockListDir):
         mockListDir.return_value = ['one-file.md']
         content = getPostContent('a-sample-slug')
         assert 'test post content' in content
+        assert 'A sample title' in content
+        assert 'A sample description' in content
+        assert 'A sample description' in content
+        assert 'SAMPLE, TAG' in content

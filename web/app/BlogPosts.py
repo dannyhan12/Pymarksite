@@ -63,13 +63,17 @@ def getPostHeaders(page=0):
 def getPostContent(slug):
     '''Get the text for a post that matches the specified slug'''
     txt = ''
+    slugMatch = False
     for f in os.listdir(_blog_posts_dir()):
         if not f.endswith('.md'):
             continue
+        if slugMatch:
+            break
 
+        # Check if this file has matching data
         firstMetaFound = False
         endMetaFound = False
-        slugMatch = False
+        metaData = {}
         with open(os.path.join(_blog_posts_dir(), f), 'r') as inputData:
             data = inputData.read()
             for line in data.split('\n'):
@@ -87,6 +91,8 @@ def getPostContent(slug):
                     txt += line + '\n'
                 else:
                     items = line.split(':')
+                    if len(items) > 1:
+                        metaData[items[0].strip()] = items[1].strip()
                     if len(items) > 1 and items[0].strip() == "Slug" and \
                             items[1].strip() == slug:
                         slugMatch = True
@@ -100,4 +106,15 @@ def getPostContent(slug):
         ]
     )
 
-    return MD.convert(txt)
+    title = '# ' + metaData['Title'] + '  \n' if 'Title' in metaData else ''
+    description = '**_' + metaData['Description'] + '_**  \n' + \
+        '\n' if 'Description' in metaData else ''
+    tags = '\nTAGS: **_' + metaData['Tags'].upper() + \
+        '_**  \n' if 'Tags' in metaData else ''
+    separator = '\n' if (len(title) > 0 or len(description)) > 0 else ''
+    return MD.convert(
+        title +
+        description +
+        separator +
+        txt +
+        tags)
