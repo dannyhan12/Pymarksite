@@ -1,6 +1,26 @@
 import os
 from markdown import Markdown
-BLOG_POSTS_DIR = '/content/posts'
+_BLOG_POSTS_DIR = None
+
+
+def _blog_posts_dir():
+    '''Get the directory where blog post files exist
+
+    return (str):
+        path of blog post directory
+    '''
+    global _BLOG_POSTS_DIR
+    if _BLOG_POSTS_DIR:
+        return _BLOG_POSTS_DIR
+
+    if os.path.exists('/content/posts'):
+        _BLOG_POSTS_DIR = '/content/posts'
+        return _BLOG_POSTS_DIR
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    _BLOG_POSTS_DIR = os.path.join(current_dir, '../../content/posts')
+    return _BLOG_POSTS_DIR
+
 
 def _isValidHeader(header):
     '''Return true if the header contains the minimum set of valid fields.'''
@@ -14,13 +34,13 @@ def _isValidHeader(header):
 def getPostHeaders(page=0):
     ''' Get information about each post in the content directory.'''
     headers = []
-    for f in os.listdir(BLOG_POSTS_DIR):
+    for f in os.listdir(_blog_posts_dir()):
         if not f.endswith('.md'):
             continue
 
         firstMetaFound = False
         metaData = {}
-        with open(os.path.join(BLOG_POSTS_DIR, f), 'r') as inputData:
+        with open(os.path.join(_blog_posts_dir(), f), 'r') as inputData:
             data = inputData.read()
             for rawLine in data.split('\n'):
                 line = rawLine.strip()
@@ -43,14 +63,14 @@ def getPostHeaders(page=0):
 def getPostContent(slug):
     '''Get the text for a post that matches the specified slug'''
     txt = ''
-    for f in os.listdir(BLOG_POSTS_DIR):
+    for f in os.listdir(_blog_posts_dir()):
         if not f.endswith('.md'):
             continue
 
         firstMetaFound = False
         endMetaFound = False
         slugMatch = False
-        with open(os.path.join(BLOG_POSTS_DIR, f), 'r') as inputData:
+        with open(os.path.join(_blog_posts_dir(), f), 'r') as inputData:
             data = inputData.read()
             for line in data.split('\n'):
                 if not firstMetaFound and line.startswith('-'):
@@ -64,7 +84,7 @@ def getPostContent(slug):
                         # No matching files, go to next file
                         break
                 if endMetaFound:
-                    txt += line
+                    txt += line + '\n'
                 else:
                     items = line.split(':')
                     if len(items) > 1 and items[0].strip() == "Slug" and \
