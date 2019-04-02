@@ -1,4 +1,4 @@
-FROM python:3.6.5-alpine
+FROM python:3.7-alpine
 
 WORKDIR /web
 
@@ -6,8 +6,9 @@ WORKDIR /web
 # and then re-use the cached image
 COPY requirements.txt /web
 
-# Install packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# Install packages
+RUN pip install --upgrade pip && \
+    pip install --trusted-host pypi.python.org -r requirements.txt --no-cache-dir
 
 # ADD the rest of the files
 ADD . /web

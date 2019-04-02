@@ -1,4 +1,6 @@
 {
-    "python.pythonPath": "web/venv/bin/python3.6",
-    "python.unitTest.pyTestPath": "web/venv/bin/pytest"
+    "python.pythonPath": "web/venv/bin/python3",
+    "python.unitTest.pyTestPath": "web/venv/bin/pytest",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 }

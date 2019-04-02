@@ -1,9 +1,15 @@
 import os
-from app import app
+from app import app, BlogPosts, Pages
 from markdown import markdown
-from app import BlogPosts
-from app import Pages
 from flask import render_template
+import sqlite3
+
+DB_PATH = os.environ.get('DB_PATH', '/db')
+
+
+def get_connection(db_name='pymarksite.db'):
+    db_path = os.path.join(DB_PATH, db_name)
+    return sqlite3.connect(db_path)
 
 
 @app.route('/')
@@ -11,14 +17,23 @@ from flask import render_template
 @app.route('/writing')
 def writing():
     app.logger.info('Loading writing')
-    posts = BlogPosts.getPostHeaders(page=0)
+
+    # Get database connection
+    cursor = get_connection().cursor()
+
+    # Get posts and render
+    posts = BlogPosts.getPostHeaders(page=0, db_cursor=cursor)
     return render_template('writing.html', posts=posts, active_page='writing')
 
 
 @app.route('/writing/<slug>')
 def post(slug):
     app.logger.info('Loading post {}'.format(slug))
-    post = BlogPosts.getPostContent(slug)
+
+    # Get database connection
+    cursor = get_connection().cursor()
+
+    post = BlogPosts.getPostContent(slug, cursor)
     return render_template(
         'post.html',
         post=post,
