@@ -109,6 +109,7 @@ venv.bak/
 # Extra stuff for this project
 content/
 pages/
+*.db
 
 # Visual studio code
 .vscode

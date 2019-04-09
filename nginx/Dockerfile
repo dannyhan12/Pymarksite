@@ -7,4 +7,5 @@ RUN rm /etc/nginx/conf.d/default.conf
 RUN mkdir -m 777 /var/log/Pymarksite
 
 # Add configuration file
-COPY nginx.conf /etc/nginx/conf.d/pymarksite.nginx.conf
+ARG CONF_FILE
+COPY $CONF_FILE /etc/nginx/conf.d/pymarksite.nginx.conf
