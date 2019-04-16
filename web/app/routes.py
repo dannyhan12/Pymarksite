@@ -45,7 +45,7 @@ def post(slug):
 
 @app.route('/pages/<slug>')
 def pages(slug):
-    PAGES_DIR = '/content/pages'
+    PAGES_DIR = '/pages'
     app.logger.info('Loading {} page'.format(slug))
     post = Pages.getPageContent(os.path.join(PAGES_DIR, '{}.md'.format(slug)))
     return render_template(

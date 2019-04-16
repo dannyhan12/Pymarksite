@@ -4,8 +4,8 @@ services:
   db:
     build: ./db
     volumes:
-     - $CONTENT_DIR:/content
-     - $DB_DIR:/db
+     - $POSTS_DIR:/posts:ro
+     - $DB_DIR:/db:rw
 
   web:
     restart: always
@@ -13,8 +13,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-     - $CONTENT_DIR:/content
      - $DB_DIR:/db
+     - $PAGES_DIR:/pages:ro
+     - $POSTS_DIR:/posts:ro
 
   nginx:
     depends_on:

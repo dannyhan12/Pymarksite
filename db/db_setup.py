@@ -133,8 +133,8 @@ def get_connection(db_dir, db_name='pymarksite.db'):
 
 if __name__ == '__main__':
     if len(sys.argv) <= 2:
-        raise RuntimeError('Need 2 arguments.'
-                           ' db_setup.py <blog_posts_input_dir> <database_output_dir>')
+        raise RuntimeError('Need 2 arguments. db_setup.py'
+                           ' <blog_posts_input_dir> <database_output_dir>')
 
     posts_dir = sys.argv[1]
     database_dir = sys.argv[2]
