@@ -4,7 +4,9 @@ from markdown import markdown
 from flask import render_template
 import sqlite3
 
-DB_PATH = os.environ.get('DB_PATH', '/db')
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_DB_DIR = os.path.join(CURRENT_DIR, '..', '..', 'db')
+DB_PATH = os.environ.get('DB_PATH', DEFAULT_DB_DIR)
 
 
 def get_connection(db_name='pymarksite.db'):
