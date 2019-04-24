@@ -1,11 +1,13 @@
-from db_setup import add_data, create_tables, get_connection, _DB_PATH
+from db_setup import add_data, create_tables, get_connection
 import os
 import pytest
 import sqlite3
 from unittest.mock import mock_open, patch
 
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(CURRENT_DIR)
 TEST_DB_NAME = 'test.db'
-TEST_DB_PATH = os.path.join(_DB_PATH, TEST_DB_NAME)
+TEST_DB_PATH = os.path.join(PARENT_DIR, TEST_DB_NAME)
 TEST_POST_DATA = '---\n' + \
     'Title: A sample title\n' + \
     'Description: A sample description\n' + \
@@ -20,7 +22,8 @@ TEST_POST_DATA = '---\n' + \
 def _setup_and_teardown():
     def _remove():
         try:
-            os.remove(TEST_DB_PATH)
+            os.remove(os.path.join(TEST_DB_PATH, TEST_DB_NAME))
+            os.rmdir(TEST_DB_PATH)
         except FileNotFoundError:
             pass
 
@@ -36,10 +39,10 @@ def test_db_setup_smoke_test(_setup_and_teardown):
     _setup_and_teardown()
 
     # WHEN: Database is created
-    create_tables(get_connection('test.db'))
+    create_tables(get_connection(TEST_DB_PATH, TEST_DB_NAME))
 
     # THEN: We should be able to make a SELECT query
-    conn = sqlite3.connect(TEST_DB_PATH)
+    conn = sqlite3.connect(os.path.join(TEST_DB_PATH, TEST_DB_NAME))
     cursor = conn.cursor()
     cursor.execute('''SELECT 1 FROM headers''')
 
@@ -50,7 +53,7 @@ def test_db_setup_multiple_create_is_safe(_setup_and_teardown):
 
     # WHEN: Database is called multiple times
     # THEN: there should be no problems
-    db_conn = get_connection('test.db')
+    db_conn = get_connection(TEST_DB_PATH, TEST_DB_NAME)
     create_tables(db_conn)
     create_tables(db_conn)
     create_tables(db_conn)
@@ -60,22 +63,22 @@ def test_db_setup_multiple_create_is_safe(_setup_and_teardown):
 @patch("os.path.getmtime")
 @patch("os.listdir")
 def test_add_data_update_headers(mock_list_dir, mock_getmtime, _setup_and_teardown):
-    db_conn = get_connection('test.db')
+    db_conn = get_connection(TEST_DB_PATH, TEST_DB_NAME)
     create_tables(db_conn)
 
-    with patch('db.db_setup.open', mock_open(read_data=TEST_POST_DATA)):
+    with patch('db_setup.open', mock_open(read_data=TEST_POST_DATA)):
         mock_list_dir.return_value = ['one-file.md']
         mock_getmtime.return_value = 12345.789
         add_data(db_conn, 'test_dir')
 
-    conn = sqlite3.connect(TEST_DB_PATH)
+    conn = sqlite3.connect(os.path.join(TEST_DB_PATH, TEST_DB_NAME))
     cursor = conn.cursor()
     rows = cursor.execute('''SELECT slug,
         file_path,
         file_mtime,
         title,
         post_date,
-        description 
+        description
         FROM headers''').fetchall()
 
     assert len(rows) == 1
@@ -90,14 +93,14 @@ def test_add_data_update_headers(mock_list_dir, mock_getmtime, _setup_and_teardo
 @patch("os.path.getmtime")
 @patch("os.listdir")
 def test_add_data_update_tags(mock_list_dir, mock_getmtime, _setup_and_teardown):
-    db_conn = get_connection('test.db')
+    db_conn = get_connection(TEST_DB_PATH, TEST_DB_NAME)
     create_tables(db_conn)
 
-    with patch('db.db_setup.open', mock_open(read_data=TEST_POST_DATA)):
+    with patch('db_setup.open', mock_open(read_data=TEST_POST_DATA)):
         mock_list_dir.return_value = ['one-file.md']
         add_data(db_conn, 'test_dir')
 
-    conn = sqlite3.connect(TEST_DB_PATH)
+    conn = sqlite3.connect(os.path.join(TEST_DB_PATH, TEST_DB_NAME))
     cursor = conn.cursor()
     rows = cursor.execute('SELECT slug, tag FROM tags ORDER BY tag').fetchall()
 
@@ -112,21 +115,21 @@ def test_add_data_update_tags(mock_list_dir, mock_getmtime, _setup_and_teardown)
 @patch("os.listdir")
 def test_record_update(mock_list_dir, mock_getmtime, _setup_and_teardown):
     print('in test_add_data_smoke_test')
-    db_conn = get_connection('test.db')
+    db_conn = get_connection(TEST_DB_PATH, TEST_DB_NAME)
     create_tables(db_conn)
 
-    with patch('db.db_setup.open', mock_open(read_data=TEST_POST_DATA)):
+    with patch('db_setup.open', mock_open(read_data=TEST_POST_DATA)):
         mock_list_dir.return_value = ['one-file.md']
         mock_getmtime.return_value = 1
         add_data(db_conn, 'test_dir')
 
     updated_data = TEST_POST_DATA.replace('A sample title', 'a new title')
-    with patch('db.db_setup.open', mock_open(read_data=updated_data)):
+    with patch('db_setup.open', mock_open(read_data=updated_data)):
         mock_list_dir.return_value = ['one-file.md']
         mock_getmtime.return_value = 2
         add_data(db_conn, 'test_dir')
 
-    conn = sqlite3.connect(TEST_DB_PATH)
+    conn = sqlite3.connect(os.path.join(TEST_DB_PATH, TEST_DB_NAME))
     cursor = conn.cursor()
     rows = cursor.execute('''SELECT title FROM headers''').fetchall()
     assert len(rows) == 1
@@ -137,21 +140,21 @@ def test_record_update(mock_list_dir, mock_getmtime, _setup_and_teardown):
 @patch("os.listdir")
 def test_record_unchanged_record(mock_list_dir, mock_getmtime, _setup_and_teardown):
     print('in test_add_data_smoke_test')
-    db_conn = get_connection('test.db')
+    db_conn = get_connection(TEST_DB_PATH, TEST_DB_NAME)
     create_tables(db_conn)
 
-    with patch('db.db_setup.open', mock_open(read_data=TEST_POST_DATA)):
+    with patch('db_setup.open', mock_open(read_data=TEST_POST_DATA)):
         mock_list_dir.return_value = ['one-file.md']
         mock_getmtime.return_value = 1
         add_data(db_conn, 'test_dir')
 
     updated_data = TEST_POST_DATA.replace('A sample title', 'a new title')
-    with patch('db.db_setup.open', mock_open(read_data=updated_data)):
+    with patch('db_setup.open', mock_open(read_data=updated_data)):
         mock_list_dir.return_value = ['one-file.md']
         mock_getmtime.return_value = 1
         add_data(db_conn, 'test_dir')
 
-    conn = sqlite3.connect(TEST_DB_PATH)
+    conn = sqlite3.connect(os.path.join(TEST_DB_PATH, TEST_DB_NAME))
     cursor = conn.cursor()
     rows = cursor.execute('''SELECT title FROM headers''').fetchall()
     assert len(rows) == 1
