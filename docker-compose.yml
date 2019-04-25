@@ -16,6 +16,7 @@ services:
      - $DB_DIR:/db
      - $PAGES_DIR:/pages:ro
      - $POSTS_DIR:/posts:ro
+     - $FLASK_APP_LOG_DIR:/var/log/Pymarksite:rw
 
   nginx:
     depends_on:
