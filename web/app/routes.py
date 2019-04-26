@@ -6,9 +6,16 @@ import sqlite3
 
 
 def _get_connection(db_name='pymarksite.db'):
-    db_dir = os.path.expanduser(os.environ.get('DB_DIR', '/db'))
-    db_path = os.path.join(db_dir, db_name)
-    return sqlite3.connect(db_path)
+    try:
+        # Look in /db folder for database files.
+        # This is where the app running in docker will look.
+        db_path = os.path.join('/db', db_name)
+        return sqlite3.connect(db_path)
+    except sqlite3.OperationalError:
+        # Use the environment variable to find the database.
+        db_dir = os.path.expanduser(os.environ.get('DB_DIR', '/db'))
+        db_path = os.path.join(db_dir, db_name)
+        return sqlite3.connect(db_path)
 
 
 @app.route('/')
