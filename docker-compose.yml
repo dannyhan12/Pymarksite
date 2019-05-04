@@ -31,6 +31,7 @@ services:
      - "$NGINX_PORT:$NGINX_PORT"
      - "443:443"
     volumes:
-      - $LETS_ENCRYPT_DIR:/etc/letsencrypt/live/programmerdays.com
+      - $LETS_ENCRYPT_DIR/fullchain.pem:/etc/letsencrypt/live/programmerdays.com/fullchain.pem
+      - $LETS_ENCRYPT_DIR/privkey.pem:/etc/letsencrypt/live/programmerdays.com/privkey.pem
       - $ACME_CHALLENGE_DIR:/usr/share/nginx/html/.well-known/acme-challenge
 
