@@ -1,12 +1,12 @@
 {
     "python.pythonPath": "web/venv/bin/python3",
-    "python.unitTest.pyTestPath": "web/venv/bin/pytest",
+    "python.testing.pyTestPath": "web/venv/bin/pytest",
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "python.unitTest.pyTestArgs": [
+    "python.testing.pyTestArgs": [
         "."
     ],
-    "python.unitTest.unittestEnabled": false,
-    "python.unitTest.nosetestsEnabled": false,
-    "python.unitTest.pyTestEnabled": true
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pyTestEnabled": true
 }
