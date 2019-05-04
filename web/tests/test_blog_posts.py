@@ -27,8 +27,10 @@ def test_get_1_valid_file_returns_1_header(mockListDir):
 def test_get_article_by_slug_works(mockListDir):
     db_cursor = MagicMock()
     db_cursor.execute.side_effect = [
-        [['some-file-path', 'A sample title', 'A sample description']],
-        [['SAMPLE'], ['TAG1234']]
+        [['some-file-path', 'A sample title', 'A sample description', '2019-01-01']],
+        [['SAMPLE'], ['TAG1234']],
+        [['next-slug', 'A sample next title']],
+        [['prev-slug', 'A sample prev title']],
     ]
     with patch('app.BlogPosts.open', mock_open(read_data=SAMPLE_POST_DATA)):
         mockListDir.return_value = ['some-file-path']
